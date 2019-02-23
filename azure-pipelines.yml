@@ -28,4 +28,18 @@ steps:
     #logProjectEvents: true # Optional
     #createLogFile: false # Optional
     #logFileVerbosity: 'normal' # Optional. Options: quiet, minimal, normal, detailed, diagnostic
+- task: CopyFiles@2
+  displayName: Copy dacpac to artifacts
+  inputs:
+    SourceFolder: azuredevopsazuresql
+    Contents: |
+     bin\$(BuildConfiguration)\azuredevopsazuresql.dacpac
+    TargetFolder: '$(build.artifactstagingdirectory)\datamodel'
+    flattenFolders: true
+
+- task: CopyFiles@2
+  displayName: Copy provisioning scripts
+  inputs:
+    SourceFolder: azuredevopsazuresql.provisioning
+    TargetFolder: '$(build.artifactstagingdirectory)/iac'
 
