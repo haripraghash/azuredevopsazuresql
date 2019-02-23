@@ -47,7 +47,7 @@ steps:
   displayName: Copy provisioning scripts
   inputs:
     SourceFolder: azuredevopsazuresql.provisioning
-    TargetFolder: '$(build.artifactstagingdirectory)/datamodel'
+    TargetFolder: '$(build.artifactstagingdirectory)/iac'
 
 - task: PublishBuildArtifacts@1
   displayName: Publish infrastructure artifacts
