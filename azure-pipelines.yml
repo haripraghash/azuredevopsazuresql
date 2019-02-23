@@ -37,9 +37,21 @@ steps:
     TargetFolder: '$(build.artifactstagingdirectory)\datamodel'
     flattenFolders: true
 
+- task: PublishBuildArtifacts@1
+  displayName: Publish infrastructure artifacts
+  inputs:
+    PathtoPublish: '$(build.artifactstagingdirectory)/datamodel'
+    ArtifactName: iac
+
 - task: CopyFiles@2
   displayName: Copy provisioning scripts
   inputs:
     SourceFolder: azuredevopsazuresql.provisioning
-    TargetFolder: '$(build.artifactstagingdirectory)/iac'
+    TargetFolder: '$(build.artifactstagingdirectory)/datamodel'
+
+- task: PublishBuildArtifacts@1
+  displayName: Publish infrastructure artifacts
+  inputs:
+    PathtoPublish: '$(build.artifactstagingdirectory)/iac'
+    ArtifactName: iac
 
