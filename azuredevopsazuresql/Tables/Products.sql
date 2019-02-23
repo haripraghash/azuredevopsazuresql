@@ -1,0 +1,5 @@
+﻿CREATE TABLE [dbo].[Products]
+(
+	[Id] INT NOT NULL IDENTITY CONSTRAINT pk_products PRIMARY KEY, 
+    [Name] NVARCHAR(MAX) NOT NULL
+)

@@ -1,0 +1,151 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    /* General */
+    "environment": {
+      "type": "string",
+      "defaultValue": "dev"
+    },
+    "shortregion": {
+      "type": "string",
+      "defaultValue": "eun"
+    },
+    /* Key Vault */
+    "keyVaultName": {
+      "type": "string",
+      "defaultValue": "vault"
+    },
+
+    /* SQL DB */
+    "sqlServerName": {
+      "type": "string",
+      "defaultValue": "productdb"
+    },
+    "sqlDbName": {
+      "type": "string",
+      "defaultValue": "productdb"
+    },
+    "sqlDbEdition": {
+      "type": "string",
+      "defaultValue": "Standard"
+    },
+    "sqlDbTier": {
+      "type": "string",
+      "defaultValue": "S1"
+    },
+
+    "sqlServerAdminLogin": {
+      "type": "string",
+      "defaultValue": "productadmin"
+    },
+    "sqlServerAdminLoginPassword": {
+      "type": "securestring"
+    },
+
+    "sqlDbMaxSizeInBytes": {
+      "type": "string",
+      "defaultValue": "268435456000"
+    },
+    "aadTenantId": {
+      "type": "string",
+      "defaultValue": ""
+    },
+    "aadAdminLogin": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Either the username of a user (e.g. 'bob@contoso.com'), or the name of a group (e.g. 'sql server admins')"
+      }
+    },
+    "aadAdminObjectId": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "Object ID of the specific user or group"
+      }
+    },
+
+    /* Artifacts parameters */
+    "_artifactsLocation": {
+      "type": "string"
+    },
+    "_artifactsLocationSasToken": {
+      "type": "securestring"
+    },
+    "_templateFolder": {
+      "type": "string",
+      "defaultValue": "resources"
+    },
+    "_scriptsFolder": {
+      "type": "string",
+      "defaultValue": "scripts"
+    }
+  },
+  "variables": {
+    /* General */
+    "_tenantId": "[subscription().tenantId]",
+
+    /* Key Vault */
+    "keyVaultSecretSqlServerConnectionString": "sql-server-connection-string",
+    "keyVaultSecretSqlServerUsername": "sql-server-username",
+    "keyVaultSecretSqlServerPassword": "sql-server-password",
+    "keyVaultSecretSqlServerServerName": "sql-server-server-name",
+
+    /* SQL DB*/
+    "sqlServerName": "[concat('acmeproduct', parameters('shortregion'), parameters('environment'),'sql')]",
+    "sqlDbTemplateName": "sql-db.json"
+  },
+  "resources": [
+    /* SQL db */
+    {
+      "name": "product-db",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2016-09-01",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(parameters('_artifactsLocation'), '/', parameters('_templateFolder'), '/', variables('sqlDbTemplateName'), parameters('_artifactsLocationSasToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "sqlServerName": {
+            "value": "[variables('sqlServerName')]"
+          },
+          "sqlDbName": {
+            "value": "[parameters('sqlDbName')]"
+          },
+          "sqlDbEdition": {
+            "value": "[parameters('sqlDbEdition')]"
+          },
+          "sqlDbTier": {
+            "value": "[parameters('sqlDbTier')]"
+          },
+          "maxSizeInBytes": {
+            "value": "[parameters('sqlDbMaxSizeInBytes')]"
+          },
+          "sqlServerAdminLogin": {
+            "value": "[parameters('sqlServerAdminLogin')]"
+          },
+          "sqlServerAdminLoginPassword": {
+            "value": "[parameters('sqlServerAdminLoginPassword')]"
+          }
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "keyVaultName": {
+      "type": "string",
+      "value": "[parameters('keyVaultName')]"
+    },
+    "sqlServerName": {
+      "type": "string",
+      "value": "[variables('sqlServerName')]"
+    },
+    "sqlDbName": {
+      "type": "string",
+      "value": "[parameters('sqlDbName')]"
+    }
+  }
+}
