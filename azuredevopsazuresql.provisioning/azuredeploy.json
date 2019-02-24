@@ -132,6 +132,14 @@
     "sqlDbName": {
       "type": "string",
       "value": "[parameters('sqlDbName')]"
+    },
+    "connectionString": {
+      "type": "string",
+      "value": "[concat('Data Source=tcp:',parameters('sqlServerName'), '.database.windows.net,1433;Initial Catalog=', parameters('sqlDbName'), ';Persist Security Info=False;User ID=', parameters('sqlServerAdminLogin'), '@', parameters('sqlServerName'), ';Password=', variables('sq'), parameters('sqlServerAdminLoginPassword'), variables('sq'),';Connect Timeout=60;Encrypt=True')]"
+    },
+    "connectionStringNoCreds": {
+      "type": "string",
+      "value": "[concat('Data Source=tcp:',parameters('sqlServerName'), '.database.windows.net,1433;Initial Catalog=', parameters('sqlDbName'))]"
     }
   }
 }
