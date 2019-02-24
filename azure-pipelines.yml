@@ -47,8 +47,9 @@ steps:
   displayName: Copy provisioning scripts
   inputs:
     SourceFolder: azuredevopsazuresql.provisioning
-    Contents: 
-     '**\*.json'
+    Contents: |
+     '*\*.json'
+     '*\*.ps1'
     TargetFolder: '$(build.artifactstagingdirectory)/iac'
     
 
