@@ -48,7 +48,8 @@ steps:
   inputs:
     SourceFolder: azuredevopsazuresql.provisioning
     Contents: |
-     **\*.json!bin
+     **\*.json
+     !bin/**/*
      **\*.ps1
     TargetFolder: '$(build.artifactstagingdirectory)/iac'
     
