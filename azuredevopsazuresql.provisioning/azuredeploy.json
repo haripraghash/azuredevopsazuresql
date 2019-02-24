@@ -121,6 +121,7 @@
       }
     }
   ],
+  "outputs": {
     "sqlServerName": {
       "type": "string",
       "value": "[variables('sqlServerName')]"
