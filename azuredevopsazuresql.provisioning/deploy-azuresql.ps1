@@ -19,7 +19,10 @@ Param (
 	# product db
 	[string] $SqlDbEdition = 'Standard',
 
-	[string] $SqlDbTier = 'S1'
+	[string] $SqlDbTier = 'S1',
+	
+	[Parameter(Mandatory=$true)]
+	[string] $keyVaultResourceGroup
 )
 
 $ErrorActionPreference = 'Stop'
@@ -88,7 +91,7 @@ function Main() {
 	# SQL server
 	$SqlServerName = $deployment.outputs.sqlServerName.Value
 	$SqlServerDbName = $deployment.outputs.sqlDbName.Value
-
+    $SqlServiceConnectionString = $deployment.outputs.connectionString.Value
 	$BSTR1 = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($sqlServerAdminLoginPassword)
 	$sqlServerAdminLoginPasswordPlain = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR1)
 
@@ -97,7 +100,17 @@ function Main() {
 	Write-Host "##vso[task.setvariable variable=SqlServerDbName;]$SqlServerDbName"
 	Write-Host "##vso[task.setvariable variable=SqlServerAppAdminLogin;]$sqlServerAdminLogin"
 	Write-Host "##vso[task.setvariable variable=SqlServerAppAdminLoginPassword;issecret=true;]$sqlServerAdminLoginPasswordPlain"
+	Write-Host "##vso[task.setvariable variable=SqlServerConnectionStringWithPassword;]$SqlServiceConnectionString"
+
+	Get-AzureRmKeyVault -VaultName $keyVaultName -ResourceGroupName $keyVaultResourceGroup
+  Set-AzureKeyVaultSecret -VaultName $keyVaultName -Name 'sql-server-connection-string' `
+  -SecretValue $SqlServiceConnectionString
+  Set-AzureKeyVaultSecret -VaultName $keyVaultName -Name 'sql-server-username' `
+  -SecretValue (ConvertTo-SecureString $SqlServerAdminLogin -AsPlainText -Force) 
+  Set-AzureKeyVaultSecret -VaultName $keyVaultName -Name '"sql-server-password' `
+  -SecretValue $sqlServerAdminLoginPassword
 }
+
 
 $SqlServerAdminLogin = "productadmin"
 $SqlServerAdminLoginPassword = Generate-Password
