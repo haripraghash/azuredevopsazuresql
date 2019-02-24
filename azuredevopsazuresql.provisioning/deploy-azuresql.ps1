@@ -102,10 +102,7 @@ function Main() {
 	Write-Host "##vso[task.setvariable variable=SqlServerAppAdminLoginPassword;issecret=true;]$sqlServerAdminLoginPasswordPlain"
 	Write-Host "##vso[task.setvariable variable=SqlServerConnectionStringWithPassword;]$SqlServiceConnectionString"
 
-	$vstsenv = Get-ChildItem env:SqlServerAppAdminLoginPassword
-	$BSTR2 = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($vstsenv)
-	$sqlServerAdminLoginPasswordPlain1 = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR2)
-	Write-Host "VSTS sql server password $sqlServerAdminLoginPasswordPlain1"
+	
 	Get-AzureRmKeyVault -VaultName $keyVaultName -ResourceGroupName $keyVaultResourceGroup
   Set-AzureKeyVaultSecret -VaultName $keyVaultName -Name 'sql-server-connection-string' `
   -SecretValue $SqlServiceConnectionString
