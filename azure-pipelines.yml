@@ -51,6 +51,7 @@ steps:
      **\*.json
      !bin/**/*
      **\*.ps1
+     !bin/**/*
     TargetFolder: '$(build.artifactstagingdirectory)/iac'
     
 
