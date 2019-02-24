@@ -42,6 +42,7 @@ $rawParams.GetEnumerator() | Foreach-Object { if ($scriptParameters.Key -contain
 #Write-Host ($params | Out-String)
 #Install-Module Az -Force -confirm:$false -AllowClobber
 #uninstall-AzureRM
+Install-Module AzureRM -Force -confirm:$false -Scope CurrentUser
 Clear-AzureRmContext
 $cred = New-Object System.Management.Automation.PSCredential($rawParams['serviceprincipalid'], $rawParams['serviceprincipalpassword'])
 
