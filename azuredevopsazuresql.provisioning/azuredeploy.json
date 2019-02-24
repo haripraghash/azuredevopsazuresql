@@ -71,6 +71,7 @@
   "variables": {
     /* General */
     "_tenantId": "[subscription().tenantId]",
+    "sq": "'",
 
     /* Key Vault */
     "keyVaultSecretSqlServerConnectionString": "sql-server-connection-string",
