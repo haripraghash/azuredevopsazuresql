@@ -121,11 +121,6 @@
       }
     }
   ],
-  "outputs": {
-    "keyVaultName": {
-      "type": "string",
-      "value": "[parameters('keyVaultName')]"
-    },
     "sqlServerName": {
       "type": "string",
       "value": "[variables('sqlServerName')]"

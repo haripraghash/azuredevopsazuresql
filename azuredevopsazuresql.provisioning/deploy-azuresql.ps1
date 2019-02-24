@@ -22,7 +22,10 @@ Param (
 	[string] $SqlDbTier = 'S1',
 	
 	[Parameter(Mandatory=$true)]
-	[string] $keyVaultResourceGroup
+	[string] $keyVaultResourceGroup,
+
+	[Parameter(Mandatory=$true)]
+	[string] $keyVaultName
 )
 
 $ErrorActionPreference = 'Stop'
@@ -85,9 +88,6 @@ function Main() {
 		throw "Deployment was unsuccessful"
 	}
 	
-	
-	$keyVaultName = $deployment.outputs.keyVaultName.Value
-
 	# SQL server
 	$SqlServerName = $deployment.outputs.sqlServerName.Value
 	$SqlServerDbName = $deployment.outputs.sqlDbName.Value
@@ -104,7 +104,7 @@ function Main() {
 
 	
 	Get-AzureRmKeyVault -VaultName $keyVaultName -ResourceGroupName $keyVaultResourceGroup
-  Set-AzureKeyVaultSecret -VaultName $keyVaultName -Name 'sql-server-connection-string' `
+  Set-AzureKeyVaultSecret -VaultName $keyVaultName  -Name 'sql-server-connection-string' `
   -SecretValue (ConvertTo-SecureString $SqlServiceConnectionString -AsPlainText -Force) 
   Set-AzureKeyVaultSecret -VaultName $keyVaultName -Name 'sql-server-username' `
   -SecretValue (ConvertTo-SecureString $SqlServerAdminLogin -AsPlainText -Force) 
