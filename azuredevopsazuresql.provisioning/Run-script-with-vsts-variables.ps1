@@ -42,10 +42,10 @@ $rawParams.GetEnumerator() | Foreach-Object { if ($scriptParameters.Key -contain
 #Write-Host ($params | Out-String)
 #Install-Module Az -Force -confirm:$false -AllowClobber
 #uninstall-AzureRM
+Clear-AzureRmContext
+$cred = New-Object System.Management.Automation.PSCredential($rawParams['serviceprincipalid'], $rawParams['serviceprincipalpassword'])
 
-#$cred = New-Object System.Management.Automation.PSCredential($rawParams['serviceprincipalid'], $rawParams['serviceprincipalpassword'])
-
-#Login-AzAccount -Credential $cred -ServicePrincipal -Subscription $rawParams['subscriptionid'] -Tenant $rawParams['tenantid']
+Login-AzureRMAccount -Credential $cred -ServicePrincipal -Subscription $rawParams['subscriptionid'] -Tenant $rawParams['tenantid']
 
 
 Write-Host ($params | Out-String)

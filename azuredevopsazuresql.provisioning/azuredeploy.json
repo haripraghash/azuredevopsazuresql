@@ -51,20 +51,6 @@
       "type": "string",
       "defaultValue": ""
     },
-    "aadAdminLogin": {
-      "type": "string",
-      "defaultValue": "",
-      "metadata": {
-        "description": "Either the username of a user (e.g. 'bob@contoso.com'), or the name of a group (e.g. 'sql server admins')"
-      }
-    },
-    "aadAdminObjectId": {
-      "type": "string",
-      "defaultValue": "",
-      "metadata": {
-        "description": "Object ID of the specific user or group"
-      }
-    },
 
     /* Artifacts parameters */
     "_artifactsLocation": {

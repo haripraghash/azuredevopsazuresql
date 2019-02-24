@@ -1,0 +1,115 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "sqlServerName": {
+      "type": "string"
+    },
+    "sqlDbName": {
+      "type": "string"
+    },
+    "sqlDbEdition": {
+      "type": "string"
+    },
+    "sqlDbTier": {
+      "type": "string"
+    },
+    "sqlDbCollation": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "SQL_Latin1_General_CP1_CI_AS"
+    },
+    "maxSizeInBytes": {
+      "type": "string"
+    },
+    "sqlServerAdminLogin": {
+      "type": "string",
+      "metadata": {
+        "description": "Sql Database Admin Login."
+      }
+    },
+    "sqlServerAdminLoginPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Sql Database Admin Password."
+      }
+    },
+    "allowAllWindowsAzureIps": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Add a firewall rule to the server to allow all Windows Azure IPs."
+      }
+    },
+    
+  
+    "aadTenantId": {
+      "type": "string",
+      "defaultValue": ""
+    }
+  },
+  "variables": {
+    "apiVersion": "2015-05-01-preview",
+    "sq": "'"
+  },
+  "resources": [
+    {
+      "name": "[parameters('sqlServerName')]",
+      "type": "Microsoft.Sql/servers",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "[variables('apiVersion')]",
+      "tags": {
+        "displayName": "sqlserver"
+      },
+      "properties": {
+        "administratorLogin": "[parameters('sqlServerAdminLogin')]",
+        "administratorLoginPassword": "[parameters('sqlServerAdminLoginPassword')]"
+      },
+      "resources": [
+        {
+          "name": "AllowAllWindowsAzureIps",
+          "type": "firewallrules",
+          "condition": "[parameters('allowAllWindowsAzureIps')]",
+          "location": "[resourceGroup().location]",
+          "apiVersion": "[variables('apiVersion')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"
+          ],
+          "properties": {
+            "startIpAddress": "0.0.0.0",
+            "endIpAddress": "0.0.0.0"
+          }
+        },
+        
+        {
+          "name": "[parameters('sqlDbName')]",
+          "type": "databases",
+          "location": "[resourceGroup().location]",
+          "apiVersion": "[variables('apiVersion')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"
+          ],
+          "tags": {
+            "displayName": "variables('sqldbName')"
+          },
+          "properties": {
+            "collation": "[parameters('sqlDbCollation')]",
+            "edition": "[parameters('sqlDbEdition')]",
+            "maxSizeBytes": "[parameters('maxSizeInBytes')]",
+            "requestedServiceObjectiveName": "[parameters('sqlDbTier')]"
+          }
+        }
+      ]
+    }
+  ],
+  "outputs": {
+    "connectionString": {
+      "type": "string",
+      "value": "[concat('Data Source=tcp:',parameters('sqlServerName'), '.database.windows.net,1433;Initial Catalog=', parameters('sqlDbName'), ';Persist Security Info=False;User ID=', parameters('sqlServerAdminLogin'), '@', parameters('sqlServerName'), ';Password=', variables('sq'), parameters('sqlServerAdminLoginPassword'), variables('sq'),';Connect Timeout=60;Encrypt=True')]"
+    },
+    "connectionStringNoCreds": {
+      "type": "string",
+      "value": "[concat('Data Source=tcp:',parameters('sqlServerName'), '.database.windows.net,1433;Initial Catalog=', parameters('sqlDbName'))]"
+    }
+  }
+}

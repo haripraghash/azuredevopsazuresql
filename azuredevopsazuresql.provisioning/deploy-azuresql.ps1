@@ -29,11 +29,10 @@ Set-Location $PSScriptRoot
 $AadTenantId = (Get-AzureRmContext).Tenant.Id
 $ArtifactsStorageAccountName = $ResourceNamePrefix + $Environment + 'artifacts'
 $ArtifactsStorageContainerName = 'artifacts'
-$ArtifactsStagingDirectory = '.\templates'
+$ArtifactsStagingDirectory = '.'
 
 function Generate-Password ($length = 20, $nonAlphaChars = 5)
 {
- Write-Host "generating password"
 	Add-Type -AssemblyName System.Web
 	
 	[char[]] $illegalChars = @(':', '/', '\', '@', '''', '"', ';', '.', '+', '#')
@@ -48,7 +47,6 @@ function Generate-Password ($length = 20, $nonAlphaChars = 5)
 			}
 		}
 	} while ($hasIllegalChars)
-	Write-Host "generated password"
 	ConvertTo-SecureString $password -AsPlainText -Force
 }
 
