@@ -105,7 +105,7 @@ function Main() {
 	
 	Get-AzureRmKeyVault -VaultName $keyVaultName -ResourceGroupName $keyVaultResourceGroup
   Set-AzureKeyVaultSecret -VaultName $keyVaultName -Name 'sql-server-connection-string' `
-  -SecretValue $SqlServiceConnectionString
+  -SecretValue (ConvertTo-SecureString $SqlServiceConnectionString -AsPlainText -Force) 
   Set-AzureKeyVaultSecret -VaultName $keyVaultName -Name 'sql-server-username' `
   -SecretValue (ConvertTo-SecureString $SqlServerAdminLogin -AsPlainText -Force) 
   Set-AzureKeyVaultSecret -VaultName $keyVaultName -Name '"sql-server-password' `
