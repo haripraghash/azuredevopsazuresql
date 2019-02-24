@@ -108,7 +108,7 @@ function Main() {
   -SecretValue (ConvertTo-SecureString $SqlServiceConnectionString -AsPlainText -Force) 
   Set-AzureKeyVaultSecret -VaultName $keyVaultName -Name 'sql-server-username' `
   -SecretValue (ConvertTo-SecureString $SqlServerAdminLogin -AsPlainText -Force) 
-  Set-AzureKeyVaultSecret -VaultName $keyVaultName -Name '"sql-server-password' `
+  Set-AzureKeyVaultSecret -VaultName $keyVaultName -Name 'sql-server-password' `
   -SecretValue $sqlServerAdminLoginPassword
 }
 
