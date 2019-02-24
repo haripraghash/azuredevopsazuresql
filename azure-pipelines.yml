@@ -38,10 +38,10 @@ steps:
     flattenFolders: true
 
 - task: PublishBuildArtifacts@1
-  displayName: Publish infrastructure artifacts
+  displayName: Publish dacpac
   inputs:
     PathtoPublish: '$(build.artifactstagingdirectory)/datamodel'
-    ArtifactName: iac
+    ArtifactName: datamodel
 
 - task: CopyFiles@2
   displayName: Copy provisioning scripts
