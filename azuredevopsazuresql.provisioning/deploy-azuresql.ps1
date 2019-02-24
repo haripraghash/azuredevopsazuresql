@@ -95,7 +95,7 @@ function Main() {
 	$BSTR1 = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($sqlServerAdminLoginPassword)
 	$sqlServerAdminLoginPasswordPlain = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR1)
 
-	
+	Write-Host "Sql server password $sqlServerAdminLoginPasswordPlain"
 	Write-Host "##vso[task.setvariable variable=SqlServerName;]$SqlServerName"
 	Write-Host "##vso[task.setvariable variable=SqlServerDbName;]$SqlServerDbName"
 	Write-Host "##vso[task.setvariable variable=SqlServerAppAdminLogin;]$sqlServerAdminLogin"
