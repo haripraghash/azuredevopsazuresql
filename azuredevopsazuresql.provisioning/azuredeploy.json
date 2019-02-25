@@ -18,9 +18,6 @@
     },
 
     /* SQL DB */
-    "sqlServerName": {
-      "type": "string"
-    },
     "sqlDbName": {
       "type": "string",
       "defaultValue": "productdb"
